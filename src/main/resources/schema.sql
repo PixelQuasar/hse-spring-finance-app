@@ -1,9 +1,11 @@
+CREATE SCHEMA IF NOT EXISTS public;
+
 CREATE TABLE IF NOT EXISTS bank_account (
     id UUID PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    fullname VARCHAR(255) NOT NULL,
     balance DECIMAL(19, 2) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    phone_number VARCHAR(15) NOT NULL,
+    phone_number VARCHAR(16) NOT NULL,
     card_number VARCHAR(16) NOT NULL
 );
 

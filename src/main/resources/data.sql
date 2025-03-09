@@ -1,5 +1,5 @@
 -- Bank accounts (passwords: password1, password2, password3)
-INSERT INTO bank_account (id, name, balance, password_hash, phone_number, card_number)
+INSERT INTO bank_account (id, fullname, balance, password_hash, phone_number, card_number)
 VALUES ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'Main Account', 5000.00,
         '$2a$10$WRPDlFPKk4HsYqGP8gN1ZO1Z5bN7vcIY.dSrR.Z7dz5kW9UvEAzCe', '+12025550178', '1234567890123456'),
        ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'Savings Account', 10000.00,
