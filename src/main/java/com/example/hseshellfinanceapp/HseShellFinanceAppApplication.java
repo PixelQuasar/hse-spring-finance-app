@@ -64,21 +64,11 @@ public class HseShellFinanceAppApplication {
             System.out.println("\n--- Creating New Account ---");
             BankAccount newAccount = bankAccountFactory.createAccount(
                     "Demo Account",
-                    new BigDecimal("500.00"),
-                    "password123",
-                    "+15555555555",
-                    "1111222233334444"
+                    new BigDecimal("500.00")
             );
 
             bankAccountRepository.save(newAccount);
             System.out.println("New account created: " + newAccount.toString());
-
-            // Find account by card number
-            System.out.println("\n--- Finding Account by Card Number ---");
-            bankAccountRepository.findByCardNumber("1111222233334444")
-                    .ifPresent(account ->
-                            System.out.println("Found by card number: " + account.toString())
-                    );
 
             // Calculate total balance
             System.out.println("\n--- Calculating Total Balance ---");

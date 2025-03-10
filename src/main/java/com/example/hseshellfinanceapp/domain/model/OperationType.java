@@ -1,4 +1,5 @@
 package com.example.hseshellfinanceapp.domain.model;
 
-public class OperationType {
+public enum OperationType {
+    INCOME, EXPENSE
 }

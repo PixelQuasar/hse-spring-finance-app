@@ -5,8 +5,6 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import com.example.hseshellfinanceapp.domain.model.BankAccount;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,45 +13,24 @@ public class BankAccountFactory {
     private static final String CARD_NUMBER_PATTERN = "^\\d{16}$";
     private static final String PHONE_PATTERN = "^\\+?[0-9]{10,15}$";
 
-    private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public BankAccountFactory(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
-
     public BankAccount createAccount(
             String name,
-            BigDecimal initialBalance,
-            String password,
-            String phoneNumber,
-            String cardNumber) {
-
+            BigDecimal initialBalance
+    ) {
         validateName(name);
         validateBalance(initialBalance);
-        validatePassword(password);
-        validatePhoneNumber(phoneNumber);
-        validateCardNumber(cardNumber);
-
-        String passwordHash = passwordEncoder.encode(password);
 
         return new BankAccount(
                 generateId(),
                 name,
-                initialBalance,
-                passwordHash,
-                phoneNumber,
-                cardNumber
+                initialBalance
         );
     }
 
-    public BankAccount createBasicAccount(String name, String password, String cardNumber) {
+    public BankAccount createBasicAccount(String name) {
         return createAccount(
                 name,
-                BigDecimal.ZERO,
-                password,
-                null, // необязательный телефон
-                cardNumber
+                BigDecimal.ZERO
         );
     }
 
