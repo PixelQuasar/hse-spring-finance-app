@@ -19,7 +19,7 @@ import com.example.hseshellfinanceapp.domain.model.OperationType;
 import com.example.hseshellfinanceapp.repository.BankAccountRepository;
 import com.example.hseshellfinanceapp.repository.CategoryRepository;
 import com.example.hseshellfinanceapp.repository.OperationRepository;
-import org.spDcringframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -252,6 +252,44 @@ public class OperationFacade {
                 .orElse("Unknown Category");
 
         return Optional.of(new OperationDetails(operation, accountName, categoryName));
+    }
+
+    public List<Operation> getAccountOperations(UUID accountId) {
+        if (accountId == null) {
+            throw new IllegalArgumentException("Account ID cannot be null");
+        }
+
+        if (!bankAccountRepository.existsById(accountId)) {
+            throw new IllegalArgumentException("Account not found: " + accountId);
+        }
+
+        return operationRepository.findByBankAccountId(accountId);
+    }
+
+    public List<Operation> getAccountOperations(UUID accountId, LocalDate startDate, LocalDate endDate) {
+        if (accountId == null) {
+            throw new IllegalArgumentException("Account ID cannot be null");
+        }
+
+        if (startDate == null || endDate == null) {
+            throw new IllegalArgumentException("Start date and end date cannot be null");
+        }
+
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("Start date cannot be after end date");
+        }
+
+        if (!bankAccountRepository.existsById(accountId)) {
+            throw new IllegalArgumentException("Account not found: " + accountId);
+        }
+
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.plusDays(1).atStartOfDay().minusNanos(1);
+
+        return operationRepository.findByDateRange(startDateTime, endDateTime)
+                .stream()
+                .filter(op -> op.getBankAccountId().equals(accountId))
+                .toList();
     }
 
     public static class OperationDetails {
