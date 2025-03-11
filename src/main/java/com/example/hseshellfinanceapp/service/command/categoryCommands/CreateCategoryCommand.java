@@ -1,4 +1,4 @@
-package com.example.hseshellfinanceapp.service.command.category;
+package com.example.hseshellfinanceapp.service.command.categoryCommands;
 
 import com.example.hseshellfinanceapp.domain.model.Category;
 import com.example.hseshellfinanceapp.domain.model.OperationType;

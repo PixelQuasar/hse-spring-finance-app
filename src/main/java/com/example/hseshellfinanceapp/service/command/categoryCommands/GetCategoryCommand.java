@@ -1,4 +1,4 @@
-package com.example.hseshellfinanceapp.service.command.category;
+package com.example.hseshellfinanceapp.service.command.categoryCommands;
 
 import java.util.Optional;
 import java.util.UUID;

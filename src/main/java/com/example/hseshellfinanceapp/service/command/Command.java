@@ -8,7 +8,7 @@ public abstract class Command<T> {
     public abstract String getDescription();
 
     protected boolean validate() {
-        return true; // Default implementation passes validation
+        return true;
     }
 
     public T executeWithValidation() {

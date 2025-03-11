@@ -1,4 +1,4 @@
-package com.example.hseshellfinanceapp.service.command.account;
+package com.example.hseshellfinanceapp.service.command.accountCommands;
 
 import java.util.UUID;
 

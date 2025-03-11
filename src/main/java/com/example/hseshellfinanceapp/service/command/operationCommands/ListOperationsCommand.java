@@ -1,4 +1,4 @@
-package com.example.hseshellfinanceapp.service.command.operation;
+package com.example.hseshellfinanceapp.service.command.operationCommands;
 
 import java.time.LocalDate;
 import java.util.List;
