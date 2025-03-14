@@ -5,20 +5,80 @@ import java.util.List;
 
 import com.example.hseshellfinanceapp.ui.menu.MenuOption;
 import com.example.hseshellfinanceapp.ui.menu.ShellMenu;
-import jakarta.annotation.PostConstruct;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
-
-import static com.example.hseshellfinanceapp.ui.ShellController.getString;
 
 @ShellComponent
 public class HelpHandler {
 
     private final List<ShellMenu> menus = new ArrayList<>();
 
-    @PostConstruct
+    @EventListener(ContextRefreshedEvent.class)
     public void init() {
+        initializeMenus();
+    }
+
+    @ShellMethod(value = "Display available commands", key = {"commands", "cmd", "ls"})
+    public String commands(@ShellOption(defaultValue = ShellOption.NULL) String command) {
+        return getHelpText(command);
+    }
+
+    @ShellMethod(value = "Display welcome message", key = {"welcome", "w"})
+    public String welcome() {
+        return """
+                ----------------------------------------
+                |        FINANCE TRACKER SHELL         |
+                ----------------------------------------
+                
+                Welcome to the Finance Tracker application!
+                This shell allows you to manage your finances,
+                track income and expenses, analyze your spending,
+                and more.
+                
+                Type 'commands' to see available commands.
+                Type 'exit' to quit the application.
+                
+                ----------------------------------------
+                """;
+    }
+
+    public String getHelpText(String command) {
+        if (command != null) {
+            for (ShellMenu menu : menus) {
+                MenuOption option = menu.findOptionByCommand(command);
+                if (option != null) {
+                    return String.format("""
+                                    Command: %s
+                                    Description: %s
+                                    Usage: %s
+                                    """,
+                            option.getCommand(),
+                            option.getDescription(),
+                            option.getHelpText());
+                }
+            }
+            return "Command not found: " + command;
+        }
+
+        StringBuilder result = new StringBuilder();
+        result.append("FINANCE TRACKER - AVAILABLE COMMANDS\n\n");
+
+        for (ShellMenu menu : menus) {
+            result.append(menu.render()).append("\n\n");
+        }
+
+        result.append("Type 'commands <command-name>' for more information about a specific command.");
+        return result.toString();
+    }
+
+    public List<ShellMenu> getMenus() {
+        return menus;
+    }
+
+    private void initializeMenus() {
         ShellMenu accountsMenu = new ShellMenu("Account Management");
         accountsMenu.addOption(new MenuOption("create-account", "Create a new bank account",
                 "create-account <name> [initial-balance]"));
@@ -69,6 +129,10 @@ public class HelpHandler {
                 "income-by-category [month] [year]"));
         analyticsMenu.addOption(new MenuOption("account-summary", "Get account balance summary",
                 "account-summary <account-id> <from-date> <to-date>"));
+        analyticsMenu.addOption(new MenuOption("monthly-trend", "Show monthly financial trends",
+                "monthly-trend [--months <number>] [--type <type>]"));
+        analyticsMenu.addOption(new MenuOption("top-spending", "Show top spending categories",
+                "top-spending [--limit <number>] [--month <month>] [--year <year>]"));
         menus.add(analyticsMenu);
 
         ShellMenu importExportMenu = new ShellMenu("Import/Export");
@@ -81,29 +145,5 @@ public class HelpHandler {
         importExportMenu.addOption(new MenuOption("import-table", "Import data from table format",
                 "import-table <input>"));
         menus.add(importExportMenu);
-    }
-
-    @ShellMethod(value = "Display available commands", key = {"help", "h", "?"})
-    public String help(@ShellOption(defaultValue = ShellOption.NULL) String command) {
-        return getString(command, menus);
-    }
-
-    @ShellMethod(value = "Display available commands", key = {"commands", "cmd", "?"})
-    public String welcome() {
-        return """
-                ----------------------------------------
-                |        FINANCE TRACKER SHELL         |
-                ----------------------------------------
-                
-                Welcome to the Finance Tracker application!
-                This shell allows you to manage your finances,
-                track income and expenses, analyze your spending,
-                and more.
-                
-                Type 'help' to see available commands.
-                Type 'exit' to quit the application.
-                
-                ----------------------------------------
-                """;
     }
 }

@@ -5,21 +5,10 @@
 1741948689762:help
 1741948816914:create-account demo
 1741948844433:create-account demo2
-1741948851817:create-transaction help
-1741948857075:help create-operation
-1741948880843:add-income demo 200
-1741948898797:add-income 200
-1741948909261:add-income 200 demo
-1741948912045:add-income
 1741948925877:add-income --amount 200 --accountId 1
 1741948945767:add-category salary
-1741948949384:add-category
-1741948965426:create-category
-1741948981763:create-category salary INCOME
-1741948989957:ad-income 200 1 1
 1741949004429:list-categories
 1741949007208:list-accounts
-1741949024102:add-income
 1741949041781:add-income 200 a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11 d0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44
 1741949062710:add-income --amount 200 a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11 d0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44
 1741949082127:add-income --amount 200 --accountId a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11 --categoryId d0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44
@@ -27,8 +16,6 @@
 1741949169026:help
 1741949170918:commands
 1741949173213:help
-1741949216501:export-json
-1741949225250:export-json -o test.json
 1741949235921:export-json --output test.json
 1741949251507:export-json --output ./test.json
 1741949279994:import-json ./test.json

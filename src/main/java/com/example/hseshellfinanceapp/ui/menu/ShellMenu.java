@@ -42,7 +42,7 @@ public class ShellMenu {
             MenuOption option = options.get(i);
             data[i + 1] = new String[]{option.getCommand(), option.getDescription()};
         }
-        
+
         ArrayTableModel model = new ArrayTableModel(data);
         TableBuilder tableBuilder = new TableBuilder(model);
         tableBuilder.addHeaderAndVerticalsBorders(BorderStyle.fancy_light);
