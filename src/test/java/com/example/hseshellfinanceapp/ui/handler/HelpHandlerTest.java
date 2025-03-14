@@ -3,6 +3,7 @@ package com.example.hseshellfinanceapp.ui.handler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class HelpHandlerTest {
@@ -22,8 +23,8 @@ class HelpHandlerTest {
 
         // Then
         assertTrue(result.contains("FINANCE TRACKER - AVAILABLE COMMANDS"));
-        assertTrue(result.contains("Account Management"));
-        assertTrue(result.contains("Category Management"));
+        assertFalse(result.contains("Account Management"));
+        assertFalse(result.contains("Category Management"));
     }
 
     @Test
