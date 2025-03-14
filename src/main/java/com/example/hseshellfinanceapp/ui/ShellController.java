@@ -1,24 +1,89 @@
-package com.example.hseshellfinanceapp.ui.handler;
+package com.example.hseshellfinanceapp.ui;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.example.hseshellfinanceapp.ui.menu.MenuOption;
 import com.example.hseshellfinanceapp.ui.menu.ShellMenu;
-import jakarta.annotation.PostConstruct;
-import org.springframework.shell.standard.ShellComponent;
-import org.springframework.shell.standard.ShellMethod;
-import org.springframework.shell.standard.ShellOption;
+import org.jline.utils.AttributedString;
+import org.jline.utils.AttributedStyle;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.shell.jline.PromptProvider;
+import org.springframework.stereotype.Controller;
 
-import static com.example.hseshellfinanceapp.ui.ShellController.getString;
-
-@ShellComponent
-public class HelpHandler {
-
+@Controller
+public class ShellController implements ApplicationListener<ContextRefreshedEvent> {
     private final List<ShellMenu> menus = new ArrayList<>();
+    private final List<Object> handlers = new ArrayList<>();
 
-    @PostConstruct
-    public void init() {
+    public ShellController() {
+        initializeMenus();
+    }
+
+    public static String getString(String command, List<ShellMenu> menus) {
+        if (command != null) {
+            for (ShellMenu menu : menus) {
+                MenuOption option = menu.findOptionByCommand(command);
+                if (option != null) {
+                    return String.format("""
+                                    Command: %s
+                                    Description: %s
+                                    Usage: %s
+                                    """,
+                            option.getCommand(),
+                            option.getDescription(),
+                            option.getHelpText());
+                }
+            }
+            return "Command not found: " + command;
+        }
+
+        StringBuilder result = new StringBuilder();
+        result.append("FINANCE TRACKER - AVAILABLE COMMANDS\n\n");
+
+        for (ShellMenu menu : menus) {
+            result.append(menu.render()).append("\n\n");
+        }
+
+        result.append("Type 'help <command>' for more information about a specific command.");
+        return result.toString();
+    }
+
+    @Bean
+    public PromptProvider promptProvider() {
+        return () -> new AttributedString("finance-tracker:> ",
+                AttributedStyle.DEFAULT.foreground(AttributedStyle.GREEN));
+    }
+
+    @Override
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        displayWelcomeMessage();
+    }
+
+    public void displayWelcomeMessage() {
+        String banner = """
+                 _____ _                            _____             _           
+                |  ___(_)_ __   __ _ _ __   ___ ___|_   _| __ __ _  ___| | _____ _ __ 
+                | |_  | | '_ \\ / _` | '_ \\ / __/ _ \\| || '__/ _` |/ __| |/ / _ \\ '__|
+                |  _| | | | | | (_| | | | | (_|  __/| || | | (_| | (__|   <  __/ |   
+                |_|   |_|_| |_|\\__,_|_| |_|\\___\\___||_||_|  \\__,_|\\___|_|\\_\\___|_|   
+                
+                ===================================================================
+                                HSE Shell Finance Application
+                ===================================================================
+                
+                Type 'help' to see available commands
+                Type 'welcome' to see this message again
+                Type 'exit' to quit the application
+                
+                """;
+
+        System.out.println(banner);
+    }
+
+    private void initializeMenus() {
         ShellMenu accountsMenu = new ShellMenu("Account Management");
         accountsMenu.addOption(new MenuOption("create-account", "Create a new bank account",
                 "create-account <name> [initial-balance]"));
@@ -83,27 +148,11 @@ public class HelpHandler {
         menus.add(importExportMenu);
     }
 
-    @ShellMethod(value = "Display available commands", key = {"help", "h", "?"})
-    public String help(@ShellOption(defaultValue = ShellOption.NULL) String command) {
+    public String getHelp(String command) {
         return getString(command, menus);
     }
 
-    @ShellMethod(value = "Display available commands", key = {"commands", "cmd", "?"})
-    public String welcome() {
-        return """
-                ----------------------------------------
-                |        FINANCE TRACKER SHELL         |
-                ----------------------------------------
-                
-                Welcome to the Finance Tracker application!
-                This shell allows you to manage your finances,
-                track income and expenses, analyze your spending,
-                and more.
-                
-                Type 'help' to see available commands.
-                Type 'exit' to quit the application.
-                
-                ----------------------------------------
-                """;
+    public List<ShellMenu> getMenus() {
+        return menus;
     }
 }

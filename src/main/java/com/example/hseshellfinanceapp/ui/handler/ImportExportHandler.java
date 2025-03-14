@@ -1,8 +1,5 @@
 package com.example.hseshellfinanceapp.ui.handler;
 
-import com.example.hseshellfinanceapp.facade.BankAccountFacade;
-import com.example.hseshellfinanceapp.facade.CategoryFacade;
-import com.example.hseshellfinanceapp.facade.OperationFacade;
 import com.example.hseshellfinanceapp.service.command.CommandExecutor;
 import com.example.hseshellfinanceapp.service.command.exportCommands.FileExportCommand;
 import com.example.hseshellfinanceapp.service.command.importCommands.FileImportCommand;
@@ -18,7 +15,7 @@ import org.springframework.shell.standard.ShellOption;
 
 @ShellComponent
 public class ImportExportHandler {
-
+    
     private final CommandExecutor commandExecutor;
     private final JsonDataImporter jsonDataImporter;
     private final TableDataImporter tableDataImporter;
@@ -28,9 +25,6 @@ public class ImportExportHandler {
     @Autowired
     public ImportExportHandler(
             CommandExecutor commandExecutor,
-            BankAccountFacade bankAccountFacade,
-            CategoryFacade categoryFacade,
-            OperationFacade operationFacade,
             JsonDataImporter jsonDataImporter,
             TableDataImporter tableDataImporter,
             JsonExportVisitor jsonExportVisitor,
