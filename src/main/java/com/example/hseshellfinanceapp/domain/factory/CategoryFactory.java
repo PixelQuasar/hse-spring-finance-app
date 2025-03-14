@@ -6,20 +6,8 @@ import com.example.hseshellfinanceapp.domain.model.Category;
 import com.example.hseshellfinanceapp.domain.model.OperationType;
 import org.springframework.stereotype.Component;
 
-/**
- * Factory for creating Category objects with proper validation
- */
 @Component
 public class CategoryFactory {
-
-    /**
-     * Creates a new category with the specified name and type
-     *
-     * @param name the name of the category
-     * @param type the type of the category (INCOME or EXPENSE)
-     * @return a new Category instance
-     * @throws IllegalArgumentException if validation fails
-     */
     public Category createCategory(String name, OperationType type) {
         validateName(name);
         validateType(type);
@@ -27,22 +15,10 @@ public class CategoryFactory {
         return new Category(generateId(), name, type);
     }
 
-    /**
-     * Creates a new income category
-     *
-     * @param name the name of the income category
-     * @return a new Category instance of type INCOME
-     */
     public Category createIncomeCategory(String name) {
         return createCategory(name, OperationType.INCOME);
     }
 
-    /**
-     * Creates a new expense category
-     *
-     * @param name the name of the expense category
-     * @return a new Category instance of type EXPENSE
-     */
     public Category createExpenseCategory(String name) {
         return createCategory(name, OperationType.EXPENSE);
     }

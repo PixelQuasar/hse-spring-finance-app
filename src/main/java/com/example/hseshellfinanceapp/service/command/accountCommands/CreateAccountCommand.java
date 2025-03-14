@@ -28,7 +28,7 @@ public class CreateAccountCommand extends Command<BankAccount> {
     }
 
     @Override
-    protected boolean validate() {
+    public boolean validate() {
         return name != null && !name.trim().isEmpty() &&
                 initialBalance != null && initialBalance.compareTo(BigDecimal.ZERO) >= 0;
     }

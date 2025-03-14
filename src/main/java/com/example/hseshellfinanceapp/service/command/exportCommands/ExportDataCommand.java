@@ -43,7 +43,7 @@ public abstract class ExportDataCommand extends Command<Boolean> {
     }
 
     @Override
-    protected boolean validate() {
+    public boolean validate() {
         return exportVisitor != null &&
                 outputStream != null &&
                 (includeAccounts || includeCategories || includeOperations);

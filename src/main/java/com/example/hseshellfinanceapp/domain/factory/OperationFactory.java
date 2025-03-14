@@ -69,23 +69,6 @@ public class OperationFactory {
         );
     }
 
-    public Operation createOperation(
-            OperationType type,
-            UUID bankAccountId,
-            BigDecimal amount,
-            String description,
-            UUID categoryId) {
-
-        return createOperation(
-                type,
-                bankAccountId,
-                amount,
-                LocalDateTime.now(),
-                description,
-                categoryId
-        );
-    }
-
     private void validateType(OperationType type) {
         if (type == null) {
             throw new IllegalArgumentException("Operation type cannot be null");

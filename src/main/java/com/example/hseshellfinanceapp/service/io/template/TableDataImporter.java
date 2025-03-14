@@ -165,7 +165,7 @@ public class TableDataImporter extends AbstractDataImporter {
                     description = value;
                     break;
                 case "category":
-                case "categoryname":
+                default:
                     break;
             }
         }

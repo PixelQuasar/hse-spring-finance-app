@@ -21,7 +21,7 @@ public abstract class ImportDataCommand extends Command<AbstractDataImporter.Imp
     }
 
     @Override
-    protected boolean validate() {
+    public boolean validate() {
         return dataImporter != null && inputStream != null;
     }
 
