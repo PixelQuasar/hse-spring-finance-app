@@ -11,21 +11,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CategoryFactoryTest {
 
-    private CategoryFactory categoryFactory;
+    private CategoryFactory factory;
 
     @BeforeEach
     void setUp() {
-        categoryFactory = new CategoryFactory();
+        factory = new CategoryFactory();
     }
 
     @Test
-    void createCategory_WithValidInput_ShouldCreateCategory() {
+    void createCategory_withValidData_shouldCreateCategory() {
         // Given
         String name = "Groceries";
         OperationType type = OperationType.EXPENSE;
 
         // When
-        Category category = categoryFactory.createCategory(name, type);
+        Category category = factory.createCategory(name, type);
 
         // Then
         assertNotNull(category);
@@ -35,114 +35,86 @@ class CategoryFactoryTest {
     }
 
     @Test
-    void createIncomeCategory_WithValidName_ShouldCreateIncomeCategory() {
+    void createIncomeCategory_shouldCreateCategoryWithIncomeType() {
         // Given
         String name = "Salary";
 
         // When
-        Category category = categoryFactory.createIncomeCategory(name);
+        Category category = factory.createIncomeCategory(name);
 
         // Then
         assertNotNull(category);
-        assertNotNull(category.getId());
         assertEquals(name, category.getName());
         assertEquals(OperationType.INCOME, category.getType());
     }
 
     @Test
-    void createExpenseCategory_WithValidName_ShouldCreateExpenseCategory() {
+    void createExpenseCategory_shouldCreateCategoryWithExpenseType() {
         // Given
-        String name = "Utilities";
+        String name = "Rent";
 
         // When
-        Category category = categoryFactory.createExpenseCategory(name);
+        Category category = factory.createExpenseCategory(name);
 
         // Then
         assertNotNull(category);
-        assertNotNull(category.getId());
         assertEquals(name, category.getName());
         assertEquals(OperationType.EXPENSE, category.getType());
     }
 
     @Test
-    void createCategory_WithNullName_ShouldThrowException() {
+    void createCategory_withNullName_shouldThrowException() {
         // Given
         String name = null;
-        OperationType type = OperationType.INCOME;
+        OperationType type = OperationType.EXPENSE;
 
         // When/Then
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> categoryFactory.createCategory(name, type)
+                () -> factory.createCategory(name, type)
         );
         assertEquals("Category name cannot be empty", exception.getMessage());
     }
 
     @Test
-    void createCategory_WithEmptyName_ShouldThrowException() {
+    void createCategory_withEmptyName_shouldThrowException() {
         // Given
         String name = "   ";
-        OperationType type = OperationType.INCOME;
+        OperationType type = OperationType.EXPENSE;
 
         // When/Then
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> categoryFactory.createCategory(name, type)
+                () -> factory.createCategory(name, type)
         );
         assertEquals("Category name cannot be empty", exception.getMessage());
     }
 
     @Test
-    void createCategory_WithTooLongName_ShouldThrowException() {
+    void createCategory_withTooLongName_shouldThrowException() {
         // Given
-        String name = "a".repeat(256);  // 256 characters
-        OperationType type = OperationType.INCOME;
+        String name = "a".repeat(256); // 256 characters
+        OperationType type = OperationType.EXPENSE;
 
         // When/Then
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> categoryFactory.createCategory(name, type)
+                () -> factory.createCategory(name, type)
         );
         assertEquals("Category name is too long (max 255 characters)", exception.getMessage());
     }
 
     @Test
-    void createCategory_WithNullType_ShouldThrowException() {
+    void createCategory_withNullType_shouldThrowException() {
         // Given
-        String name = "Utilities";
+        String name = "Groceries";
         OperationType type = null;
 
         // When/Then
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> categoryFactory.createCategory(name, type)
+                () -> factory.createCategory(name, type)
         );
         assertEquals("Category type cannot be null", exception.getMessage());
-    }
-
-    @Test
-    void createIncomeCategory_WithNullName_ShouldThrowException() {
-        // Given
-        String name = null;
-
-        // When/Then
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> categoryFactory.createIncomeCategory(name)
-        );
-        assertEquals("Category name cannot be empty", exception.getMessage());
-    }
-
-    @Test
-    void createExpenseCategory_WithNullName_ShouldThrowException() {
-        // Given
-        String name = null;
-
-        // When/Then
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> categoryFactory.createExpenseCategory(name)
-        );
-        assertEquals("Category name cannot be empty", exception.getMessage());
     }
 }

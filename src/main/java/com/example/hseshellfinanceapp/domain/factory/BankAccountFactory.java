@@ -2,7 +2,6 @@ package com.example.hseshellfinanceapp.domain.factory;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 import com.example.hseshellfinanceapp.domain.model.BankAccount;
 import org.springframework.stereotype.Component;
@@ -49,29 +48,6 @@ public class BankAccountFactory {
         }
         if (balance.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Start balance cannot be negative");
-        }
-    }
-
-    private void validatePassword(String password) {
-        if (password == null || password.trim().isEmpty()) {
-            throw new IllegalArgumentException("Password cannot be empty");
-        }
-        if (password.length() < 6) {
-            throw new IllegalArgumentException("Password should be at least 6 characters long");
-        }
-    }
-
-    private void validatePhoneNumber(String phoneNumber) {
-        if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
-            if (!Pattern.matches(PHONE_PATTERN, phoneNumber)) {
-                throw new IllegalArgumentException("Invalid phone number format");
-            }
-        }
-    }
-
-    private void validateCardNumber(String cardNumber) {
-        if (cardNumber == null || !Pattern.matches(CARD_NUMBER_PATTERN, cardNumber)) {
-            throw new IllegalArgumentException("Card number should be 16 digits");
         }
     }
 

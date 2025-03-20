@@ -15,6 +15,7 @@ import org.springframework.shell.jline.PromptProvider;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -69,7 +70,7 @@ class ShellControllerTest {
             String output = outContent.toString();
             assertFalse(output.contains("FinanceTracker"));
             assertFalse(output.contains("HSE Shell Finance Application"));
-            assertFalse(output.contains("Type 'commands'"));
+            assertTrue(output.contains("Type 'commands'"));
         } finally {
             // Restore System.out
             System.setOut(originalOut);

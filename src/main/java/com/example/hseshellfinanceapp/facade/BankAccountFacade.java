@@ -103,13 +103,6 @@ public class BankAccountFacade {
                 .toList();
     }
 
-    public List<Operation> getAccountExpenseOperations(UUID accountId) {
-        return operationRepository.findByBankAccountId(accountId)
-                .stream()
-                .filter(Operation::isExpense)
-                .toList();
-    }
-
     @Transactional
     public Optional<BankAccount> recalculateBalance(UUID accountId) {
         return bankAccountRepository.recalculateBalance(accountId);

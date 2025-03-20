@@ -4,11 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.TreeMap;
 import java.util.UUID;
 
 import com.example.hseshellfinanceapp.domain.factory.OperationFactory;
@@ -136,10 +133,6 @@ public class OperationFacade {
         return operationRepository.findByType(type);
     }
 
-    public List<Operation> getOperationsByDate(LocalDate date) {
-        return operationRepository.findByDate(date);
-    }
-
     public List<Operation> getOperationsByDateRange(LocalDate startDate, LocalDate endDate) {
         LocalDateTime startDateTime = startDate.atStartOfDay();
         LocalDateTime endDateTime = endDate.plusDays(1).atStartOfDay().minusNanos(1);
@@ -203,37 +196,6 @@ public class OperationFacade {
         }
 
         return income.subtract(expenses);
-    }
-
-    public Map<LocalDate, List<Operation>> getOperationsGroupedByDate(
-            LocalDate startDate, LocalDate endDate) {
-
-        List<Operation> operations = getOperationsByDateRange(startDate, endDate);
-
-        Map<LocalDate, List<Operation>> result = new TreeMap<>(); // TreeMap for sorted dates
-
-        for (Operation op : operations) {
-            LocalDate date = op.getDate().toLocalDate();
-            result.computeIfAbsent(date, k -> new ArrayList<>()).add(op);
-        }
-
-        return result;
-    }
-
-    public long getOperationCount() {
-        return operationRepository.findAll().size();
-    }
-
-    @Transactional
-    public Optional<Operation> updateOperationDescription(UUID operationId, String newDescription) {
-        Optional<Operation> operationOpt = operationRepository.findById(operationId);
-        if (operationOpt.isEmpty()) {
-            return Optional.empty();
-        }
-
-        Operation operation = operationOpt.get();
-        operation.setDescription(newDescription);
-        return Optional.of(operationRepository.save(operation));
     }
 
     public Optional<OperationDetails> getOperationDetails(UUID operationId) {

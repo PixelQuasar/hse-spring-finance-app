@@ -10,7 +10,6 @@ import java.util.UUID;
 
 import com.example.hseshellfinanceapp.domain.factory.CategoryFactory;
 import com.example.hseshellfinanceapp.domain.model.Category;
-import com.example.hseshellfinanceapp.domain.model.Operation;
 import com.example.hseshellfinanceapp.domain.model.OperationType;
 import com.example.hseshellfinanceapp.repository.CategoryRepository;
 import com.example.hseshellfinanceapp.repository.OperationRepository;
@@ -40,14 +39,6 @@ public class CategoryFacade {
         return categoryRepository.save(category);
     }
 
-    public Category createIncomeCategory(String name) {
-        return createCategory(name, OperationType.INCOME);
-    }
-
-    public Category createExpenseCategory(String name) {
-        return createCategory(name, OperationType.EXPENSE);
-    }
-
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
@@ -62,10 +53,6 @@ public class CategoryFacade {
 
     public Optional<Category> getCategoryById(UUID id) {
         return categoryRepository.findById(id);
-    }
-
-    public Optional<Category> getCategoryByName(String name) {
-        return categoryRepository.findByName(name);
     }
 
     public Optional<Category> updateCategoryName(UUID id, String newName) {
@@ -86,30 +73,6 @@ public class CategoryFacade {
         }
 
         return categoryRepository.deleteById(id);
-    }
-
-    @Transactional
-    public boolean deleteCategoryAndReassign(UUID categoryId, UUID newCategoryId) {
-        if (!categoryRepository.existsById(categoryId) || !categoryRepository.existsById(newCategoryId)) {
-            return false;
-        }
-
-        List<Operation> operations = operationRepository.findByCategoryId(categoryId);
-
-        for (Operation operation : operations) {
-            operation.setCategoryId(newCategoryId);
-            operationRepository.save(operation);
-        }
-
-        return categoryRepository.deleteById(categoryId);
-    }
-
-    public List<Operation> getCategoryOperations(UUID categoryId) {
-        return operationRepository.findByCategoryId(categoryId);
-    }
-
-    public BigDecimal getCategoryTotal(UUID categoryId) {
-        return operationRepository.sumByCategoryId(categoryId);
     }
 
     public Map<String, BigDecimal> getSpendingByCategory() {
@@ -140,10 +103,6 @@ public class CategoryFacade {
         }
 
         return result;
-    }
-
-    public boolean isCategoryNameTaken(String name) {
-        return categoryRepository.existsByName(name);
     }
 
     public List<CategorySummary> getCategoriesSortedByAmount(OperationType type) {
